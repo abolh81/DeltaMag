@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* @font-face {
+    font-family: 'DanaFanum';
+    src: url('/path/to/fonts/DanaFanum.woff2') format('woff2'),
+         url('/path/to/fonts/DanaFanum.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+} */
+
+body {
+    font-family: 'DanaFanum', sans-serif;
+}
