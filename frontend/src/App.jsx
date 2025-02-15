@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Article from "./pages/Article";
 import Author from "./pages/Author";
 import Multimedia from "./pages/Multimedia";
+import MediaDetailPage from './pages/MediaDetailPage';
 import JournalManagement from "./pages/JournalManagement";
 import UploadArticle from "./pages/UploadArticle";
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/article/:id" element={<Article />} />
             <Route path="/author/:id" element={<Author />} />
             <Route path="/multimedia" element={<Multimedia />} />
+            <Route path="/media/:id" element={<MediaDetailPage />} />
             <Route path="/journal-management" element={<JournalManagement />} />
             <Route path="/upload-article" element={<UploadArticle />} />
           </Routes>
