@@ -12,16 +12,13 @@ const Sidebar = ({ userRole }) => {
                         خانه
                     </Link>
                 </li>
-                <li className="mb-2">
-                    <Link to="/dashboard/articles" className="block p-2 hover:bg-gray-700 rounded">
-                        ارسال مقاله
-                    </Link>
-                </li>
-                <li className="mb-2">
-                    <Link to="/dashboard/comments" className="block p-2 hover:bg-gray-700 rounded">
-                        نظرات
-                    </Link>
-                </li>
+                {(userRole === 'editor' || userRole === 'graphic' || userRole === 'admin') && (
+                    <li className="mb-2">
+                        <Link to="/dashboard/article-management" className="block p-2 hover:bg-gray-700 rounded">
+                            مدیریت مقالات
+                        </Link>
+                    </li>
+                )}
                 <li className="mb-2">
                     <Link to="/dashboard/saved" className="block p-2 hover:bg-gray-700 rounded">
                         مقالات ذخیره شده
@@ -36,17 +33,11 @@ const Sidebar = ({ userRole }) => {
                 {userRole === 'admin' && (
                     <li className="mb-2">
                         <Link to="/dashboard/stats" className="block p-2 hover:bg-gray-700 rounded">
-                            آمار و مدیریت مقالات
+                            آمار
                         </Link>
                     </li>
                 )}
-                {(userRole === 'editor' || userRole === 'graphic') && (
-                    <li className="mb-2">
-                        <Link to="/dashboard/manage-articles" className="block p-2 hover:bg-gray-700 rounded">
-                            مدیریت مقالات
-                        </Link>
-                    </li>
-                )}
+                
             </ul>
         </div>
     );
