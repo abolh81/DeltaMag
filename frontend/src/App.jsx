@@ -9,6 +9,11 @@ import Multimedia from "./pages/Multimedia";
 import MediaDetailPage from './pages/MediaDetailPage';
 import JournalManagement from "./pages/JournalManagement";
 import UploadArticle from "./pages/UploadArticle";
+import LoginPage from './pages/LoginPage'; // مسیر کامپوننت LoginPage
+import SignupPage from './pages/SignupPage';
+
+import Dashboard from './pages/Dashboard';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -18,10 +23,16 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
             <Route path="/article/:id" element={<Article />} />
             <Route path="/author/:id" element={<Author />} />
             <Route path="/multimedia" element={<Multimedia />} />
             <Route path="/media/:id" element={<MediaDetailPage />} />
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="profile" element={<Profile user={{ name: 'علی', email: 'ali@example.com', bio: 'برنامه‌نویس' }} />} />
+              {/* سایر صفحات فرعی */}
+            </Route>
             <Route path="/journal-management" element={<JournalManagement />} />
             <Route path="/upload-article" element={<UploadArticle />} />
           </Routes>
