@@ -18,11 +18,13 @@ const ArticleEditor = ({ onSave, onCancel }) => {
         readonly: false,
         placeholder: 'لطفا متن مقاله خود را وارد کنید...'
     }), []);
+    
     const validFormats = {
         image: ['image/png', 'image/jpeg', 'image/gif'],
         document: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
         video: ['video/mp4', 'video/webm']
     };
+
     const validateFile = (file, type) => {
         if (file && !validFormats[type].includes(file.type)) {
             toast.error(`فرمت فایل انتخابی برای ${type} اشتباه است!`, { position: "top-right" });
@@ -35,10 +37,15 @@ const ArticleEditor = ({ onSave, onCancel }) => {
         const file = e.target.files[0];
         if (file && validateFile(file, type)) {
             setFileData(prev => ({ ...prev, [type]: file }));
-            setBorderColor(prev => ({ ...prev, [type]: 'green' }));
-            if (type === 'image') {
-                setPreview(URL.createObjectURL(file));
-            }
+            setPreview(type === 'image' ? URL.createObjectURL(file) : null); // برای تصویر، پیش‌نمایش را ست می‌کنیم
+    
+            // تغییر رنگ مرز به طور دقیق
+            setBorderColor(prev => {
+                const updatedBorderColor = { ...prev, [type]: 'green' };
+                console.log("Updated immediately:", updatedBorderColor); // مقدار جدید نمایش داده می‌شود ✅
+                return updatedBorderColor;
+            });
+            
         }
     };
 
@@ -87,22 +94,30 @@ const ArticleEditor = ({ onSave, onCancel }) => {
                 <JoditEditor ref={editor} value={content} config={config} onBlur={(newContent) => setContent(newContent)} />
             </div>
             <div className='flex basis-1/3 gap-4 items-start'>
-            {['image', 'document', 'video'].map(type => (
-                <div key={type} className="flex flex-col items-center justify-center w-full mb-4">
-                    <label className={`flex flex-col items-center justify-center w-full h-64 border-2 border-${borderColor[type]}-500 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800` }>
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">برای آپلود کلیک کن</span> یا فایلتو بکش اینجا</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 text-center"> فرمت های درست : {validFormats[type].map(item => item.replace(type+"/", '')).join(" , ")}</p>
-                        </div>
-                        <input type="file" className="hidden" onChange={(e) => handleFileChange(e, type)} />
-                    </label>
-                    {fileData[type] && <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{fileData[type].name}</p>}
-                    {type === 'image' && preview && <img src={preview} alt="Preview" className="w-32 h-32 object-cover mx-auto mt-2 rounded-lg shadow-lg" />}
-                </div>
-            ))}
+                {['image', 'document', 'video'].map(type => (
+                    <div key={type} className="flex flex-col items-center justify-center w-full mb-4">
+                        <label 
+                        className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800`}
+                        style={{ backgroundColor: borderColor[type] === 'green' ? '#d1d5db' : '#f9fafb' }}
+                        >
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                </svg>
+                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">برای آپلود کلیک کن</span> یا فایلتو بکش اینجا</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 text-center"> فرمت های درست : {validFormats[type].map(item => item.replace(type+"/", '')).join(" , ")}</p>
+                            </div>
+                            <input 
+                                type="file" 
+                                className="hidden" 
+                                accept={validFormats[type].join(',')} 
+                                onChange={(e) => handleFileChange(e, type)} 
+                            />
+                        </label>
+                        {fileData[type] && <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{fileData[type].name}</p>}
+                        {type === 'image' && preview && <img src={preview} alt="Preview" className="w-32 h-32 object-cover mx-auto mt-2 rounded-lg shadow-lg" />}
+                    </div>
+                ))}
             </div>
             <div className="flex justify-end gap-4">
                 <button onClick={handleCancel} className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600">لغو</button>
@@ -112,6 +127,5 @@ const ArticleEditor = ({ onSave, onCancel }) => {
         </div>
     );
 };
-
 
 export default ArticleEditor;
