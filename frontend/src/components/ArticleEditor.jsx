@@ -1,274 +1,167 @@
 import React, { useState, useRef, useMemo } from 'react';
 import JoditEditor from 'jodit-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+const ArticleEditor = ({ onSave, onCancel }) => {
+    const editor = useRef(null);
+    const [title, setTitle] = useState('');
+    const [topic, setTopic] = useState('');
+    const [content, setContent] = useState('');
+    const [image, setImage] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [file, setFile] = useState(null);
+    const [video, setVideo] = useState(null);
 
-const Example = ({ placeholder }) => {
-	const editor = useRef(null);
-	const [content, setContent] = useState('');
-    
-    // const config = {
-    //     language: "fa", // تنظیم زبان فارسی
-    //     direction: "rtl", // راست‌چین کردن ویرایشگر
-    //     toolbarSticky: false,
-    //     spellcheck: false,
-    //     buttons: "bold,italic,underline,strikethrough,|,ul,ol,|,link,image,|,align,undo,redo",
-    //     toolbarAdaptive: false,
-    //   };
-	const config = useMemo(
-		() => ({
-            language: 'en',
-            i18n: {
-                en: {
-                    'Type something': 'چیزی بنویسید',
-                    Advanced: 'پیشرفته',
-                    'About Jodit': 'درباره ویرایشگر',
-                    'Jodit Editor': 'ویرایشگر جودیت',
-                    "Jodit User's Guide": 'راهنمای کاربران',
-                    'contains detailed help for using': 'راهنمایی برای استفاده',
-                    'For information about the license, please go to our website:':
-                        'برای کسب اطلاعات در رابطه با لایسنس لطفا به وب سایت مراجعه کنید:',
-                    'Buy full version': 'خرید نسخه کامل',
-                    
-                    Anchor: 'لینک',
-                    'Open in new tab': 'بازکردن در تب جدید',
-                    'Open in fullsize': 'تمام صفحه کردن ویرایشگر',
-                    'Clear Formatting': 'پاک کردن قالب ها',
-                    'Fill color or set the text color':
-                        'رنگ را پر کنید یا رنگ متن را تنظیم کنید',
-                    Redo: 'باز انجام',
-                    Undo: 'بازگردانی',
-                    Bold: 'درشت',
-                    Italic: 'کج',
-                    'Insert Unordered List': 'افزودن لیست بدون ترتیب',
-                    'Insert Ordered List': 'افزون لیست با ترتیب',
-                    'Align Center': 'وسط چین',
-                    'Align Justify': 'تراز کردن',
-                    'Align Left': 'چپ چین',
-                    'Align Right': 'راست چین',
-                    'Insert Horizontal Line': 'افزودن خط افقی',
-                    'Insert Image': 'افزودن عکس',
-                    'Insert file': 'افزودن فایل',
-                    'Insert youtube/vimeo video': 'افزودن ویدیو از یوتیوب و وایمو',
-                    'Insert link': 'افزودن لینک',
-                    'Font size': 'اندازه فونت',
-                    'Font family': 'فونت',
-                    'Insert format block': 'افزودن بلاک',
-                    'line height': 'فاصله خطوط',
-                    Normal: 'معمولی',
-                    'Heading 1': 'سرتیتر ۱',
-                    'Heading 2': 'سرتیتر ۲',
-                    'Heading 3': 'سرتیتر ۳',
-                    'Heading 4': 'سرتیتر ۴',
-                    Quote: 'نقل قول',
-                    Code: 'سورس کد',
-                    Insert: 'افزودن',
-                    'Insert table': 'افزودن جدول',
-                    'Decrease Indent': 'افزودن فرورفتگی',
-                    'Increase Indent': 'کاهش فرورفتگی',
-                    'Select Special Character': 'کاراکتر ویژه را انتخاب کنید',
-                    'Insert Special Character': 'افزودن کاراکتر ویژه',
-                    'Paint format': 'قالب رنگ',
-                    'Change mode': 'تغییر حالت',
-                    Margins: 'فاصله ها',
-                    top: 'بالا',
-                    right: 'راست',
-                    bottom: 'پایین',
-                    left: 'چپ',
-                    Styles: 'استایل ها',
-                    Classes: 'کلاس ها',
-                    Align: 'تراز کردن',
-                    Right: 'راست',
-                    Center: 'وسط',
-                    Left: 'چپ',
-                    '--Not Set--': '--تنظیم نشده--',
-                    Src: 'سورس',
-                    Title: 'عنوان',
-                    Alternative: 'جایگزین',
-                    Link: 'لینک',
-                    'Open link in new tab': 'باز کزدن لینک در تب جدید',
-                    Image: 'عکس',
-                    file: 'فایل',
-                    'Image properties': 'مقادیر عکس',
-                    Cancel: 'بیخیال',
-                    Ok: 'تایید',
-                    'Your code is similar to HTML. Keep as HTML?':
-                        'به نظر کد شما از نوع HTML است , با همین قالب ادامه دهیم ؟',
-                    'Paste as HTML': 'جایگزاری HTML',
-                    Keep: 'نگه دار',
-                    Clean: 'تمیز کزدن',
-                    'Insert as Text': 'وارد کردن به عنوان متن عادی',
-                    'Word Paste Detected': 'ظاهر در حال کپی پیست کردن هستید',
-                    'The pasted content is coming from a Microsoft Word/Excel document. Do you want to keep the format or clean it up?':
-                        'متن کپی شده از محصولات مایکروسافت است مایل هستید استایل مایکروسافت منتقل شود یا به عنوان متن عادی باکزاری شود ؟',
-                    'Insert only Text': 'افزودن به عنوان متن عادی',
-                    'File Browser': 'انتخاب فایل',
-                    'Error on load list': 'خطا در بارگزاری لیست',
-                    'Error on load folders': 'خطا در بازگزاری پوشه ها',
-                    'Are you sure?': 'از انجام این اقدام اطمینان دارید ؟',
-                    'Enter Directory name': 'نام مسیر را وارد کنید',
-                    'Create directory': 'ساخت مسیر',
-                    'type name': 'نام را وارد کنید',
-                    'Drop image': 'عکس را رها کنید',
-                    'Drop file': 'فایل را رها کنید',
-                    'or click': 'یا کلیک کنید',
-                    'Alternative text': 'متن جایگزین',
-                    Browse: 'جستجو',
-                    Upload: 'آپلود',
-                    Background: 'پس زمینه',
-                    Text: 'متن',
-                    Top: 'بالا',
-                    Middle: 'وسط',
-                    Bottom: 'پایین',
-                    'Insert column before': 'افزودن ستون قبل از',
-                    'Insert column after': 'افزودن ستون بعد از',
-                    'Insert row above': 'افزودن خط قبل از',
-                    'Insert row below': 'افزودن خط بعد از',
-                    'Delete table': 'حذف جدول',
-                    'Delete row': 'حذف خط',
-                    'Delete column': 'حذف ستون',
-                    'Empty cell': 'خالی کدن بلاک',
-                    Delete: 'حذف',
-                    'Strike through': 'خط زدن',
-                    Underline: 'زیر خط (Underline)',
-                    Break: 'شکستن',
-                    'Search for': 'جستجو برای',
-                    'Replace with': 'جایگزین با',
-                    Replace: 'جایگزین',
-                    Edit: 'ویرایش',
-                    'Vertical align': 'تراز عمودی',
-                    'Horizontal align': 'تراز افقی',
-                    Filter: 'فیلتر',
-                    'Sort by changed': 'مرتب سازی بر اساس تغییرات',
-                    'Sort by name': 'مرتب سازی بر اساس نام',
-                    'Sort by size': 'مرتب سازی بر اساس اندازه',
-                    'Add folder': 'افزودن پوشه',
-                    Split: 'شکاف',
-                    'Split vertical': 'شکاف عمودی',
-                    'Split horizontal': 'شکاف افقی',
-                    Merge: 'تجمیع کردن',
-                    'Add column': 'افزودن ستون',
-                    'Add row': 'افزودن خط',
-                    Border: 'خط',
-                    'Embed code': 'درج کد',
-                    Update: 'بروزرسانی',
-                    superscript: 'روی متن',
-                    subscript: 'زیرمتن',
-                    'Cut selection': 'برداشتن انتخاب شده ها',
-                    Paste: 'جایگذاری',
-                    'Choose Content to Paste': 'انتخاب محتوای برای چسباندن',
-                    'Chars: %d': 'کاراکترها: %d',
-                    'Words: %d': 'کلمات: %d',
-                    All: 'همه',
-                    'Select %s': 'انتخاب: %s',
-                    'Select all': 'انتخاب همه',
-                    source: 'سورس',
-                    bold: 'بولد',
-                    italic: 'ایتالیک',
-                    brush: 'قلم مو',
-                    link: 'لینک',
-                    undo: 'بازگردانی',
-                    redo: 'باز انجام',
-                    table: 'جدول',
-                    image: 'عکس',
-                    eraser: 'پاک کن',
-                    paragraph: 'پاراگراف',
-                    fontsize: 'سایز فونت',
-                    video: 'ویدیو',
-                    font: 'فونت',
-                    about: 'درباره',
-                    print: 'چاپ',
-                    underline: 'خط زیرین',
-                    strikethrough: 'خط روی متن',
-                    indent: 'فرورفتگی',
-                    outdent: 'فرورفتگی از بیرون',
-                    fullsize: 'کامل کردن',
-                    shrink: 'کوچک کردن',
-                    hr: 'خط',
-                    ul: 'لیست',
-                    ol: 'لیست عدید',
-                    cut: 'بریدن',
-                    selectall: 'انتخاب همه',
-                    'Open link': 'بازکردن لینک',
-                    'Edit link': 'ویرایش لینک',
-                    'No follow': 'دنبال نکردن',
-                    Unlink: 'حذف لینک',
-                    Eye: 'مرور',
-                    pencil: 'اصلاح',
-                    URL: ' آدرس',
-                    Reset: 'ریست',
-                    Save: 'ذخیر',
-                    'Save as ...': 'ذخیره به عنوان...',
-                    Resize: 'تغییر اندازه',
-                    Crop: 'بریدن',
-                    Width: 'طول',
-                    Height: 'ارتفاع',
-                    'Keep Aspect Ratio': 'نسبت ابعاد را حفظ کن',
-                    Yes: 'بله',
-                    No: 'خیر',
-                    Remove: 'حذف',
-                    Select: 'انتخاب',
-                    'You can only edit your own images. Download this image on the host?':
-                        'شما فقط میتوانید عکس های خود را ویرایش کنید , میخواهید عکس را از هاست دانلود کنیم ؟',
-                    'The image has been successfully uploaded to the host!':
-                        'عکس با موفقیت در هاست آپلود شد',
-                    palette: 'جعبه رنگ نقاشی',
-                    'There are no files': 'در این مسیر فایل وجود ندارد',
-                    Rename: 'تغییر اسم',
-                    'Enter new name': 'اسم جدید را وارد کنید',
-                    preview: 'نمایش',
-                    download: 'دانلود',
-                    'Paste from clipboard': 'جایگذاری از کلیپ بورد',
-                    "Your browser doesn't support direct access to the clipboard.":
-                        'مرورگر شما اجازه دسترسی به کلیپ بورد را نمیدهد.',
-                    'Copy selection': 'کپی کردن انتخاب شده ها',
-                    copy: 'کپی',
-                    'Border radius': 'مرز خمیده',
-                    'Show all': 'نمایش همه',
-                    Apply: 'درخواست',
-                    'Please fill out this field': 'لطفا با پر کردن این زمینه',
-                    'Please enter a web address': 'لطفا وارد یک آدرس وب',
-                    Default: 'به طور پیش فرض',
-                    Circle: 'دایره',
-                    Dot: 'پورنو نقطه',
-                    Quadrate: 'Quadrate',
-                    Find: 'پیدا کردن',
-                    'Find Previous': 'پیدا کردن قبلی',
-                    'Find Next': 'پیدا کردن بعدی',
-                    'Insert className': 'Insertar nombre de clase',
-                    'Press Alt for custom resizing': 'برای تغییر اندازه سفارشی فشار دهید'
-                }
-            },
-            events: {
-                afterInit: function () {
-                    const style = document.createElement("style");
-                    style.innerHTML = `
-                        :root {
-                            --jd-font-default: "Vazir", Tahoma, Arial, sans-serif;
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
-            },
-            
-            height:450,
-			readonly: false, // all options from https://xdsoft.net/jodit/docs/,
-			placeholder: placeholder || 'لطفا متن موردنظر خود را اینجا تایپ کنید....'
-		}),
-		[placeholder]
-	);
+    // 📌 تنظیمات Jodit Editor
+    const config = useMemo(() => ({
+        language: 'en',
+        height: 450,
+        readonly: false,
+        placeholder: 'لطفا متن مقاله خود را وارد کنید...',
+    }), []);
 
-    
+    // 📌 بررسی فرمت فایل
+    const validateFile = (file, type) => {
+        const validFormats = {
+            image: ['image/png', 'image/jpeg', 'image/gif'],
+            document: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+            video: ['video/mp4', 'video/webm']
+        };
 
-	return (
-		<JoditEditor
-			ref={editor}
-			value={content}
-			config={config}
-			tabIndex={1} // tabIndex of textarea
-			onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-			onChange={(newContent) => {}}
-		/>
-	);
+        if (file && !validFormats[type].includes(file.type)) {
+            toast.error(`فرمت فایل انتخابی برای ${type} اشتباه است!`, { position: "top-right" });
+            return false;
+        }
+        return true;
+    };
+
+    // 📌 هندل آپلود دراگ‌اند‌دراپ
+    const handleDrop = (e, type) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (validateFile(file, type)) {
+            if (type === "image") {
+                setImage(file);
+                setPreview(URL.createObjectURL(file));
+            } else if (type === "document") {
+                setFile(file);
+            } else if (type === "video") {
+                setVideo(file);
+            }
+        }
+    };
+
+    // 📌 ذخیره مقاله با تأیید
+    const handleSave = () => {
+        if (!title || !topic) {
+            toast.error("لطفاً عنوان و موضوع مقاله را وارد کنید!", { position: "top-right" });
+            return;
+        }
+
+        toast.info("آیا از ذخیره مقاله مطمئن هستید؟", {
+            position: "top-right",
+            autoClose: false,
+            closeOnClick: true,
+            draggable: true,
+            onClick: () => {
+                const articleData = { title, topic, content, image, file, video };
+                onSave(articleData);
+                toast.success("مقاله با موفقیت ذخیره شد!", { position: "top-right" });
+            }
+        });
+    };
+
+    // 📌 لغو ویرایش مقاله با تأیید
+    const handleCancel = () => {
+        toast.info("آیا از لغو ویرایش مطمئن هستید؟", {
+            position: "top-right",
+            autoClose: false,
+            closeOnClick: true,
+            draggable: true,
+            onClick: () => {
+                onCancel();
+                toast.warn("ویرایش مقاله لغو شد!", { position: "top-right" });
+            }
+        });
+    };
+
+    return (
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">ویرایشگر مقاله</h2>
+
+            {/* فیلد عنوان */}
+            <div className="mb-4">
+                <label className="block text-gray-700 dark:text-gray-300 mb-2">عنوان مقاله</label>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                />
+            </div>
+
+            {/* فیلد موضوع */}
+            <div className="mb-4">
+                <label className="block text-gray-700 dark:text-gray-300 mb-2">موضوع مقاله</label>
+                <input
+                    type="text"
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                />
+            </div>
+
+            {/* فیلد ویرایشگر متن */}
+            <div className="mb-4">
+                <JoditEditor
+                    ref={editor}
+                    value={content}
+                    config={config}
+                    onBlur={(newContent) => setContent(newContent)}
+                />
+            </div>
+
+            {/* دراپ‌باکس آپلود عکس */}
+            <div
+                className="border-2 border-dashed p-4 rounded-lg cursor-pointer text-center mb-4"
+                onDrop={(e) => handleDrop(e, "image")}
+                onDragOver={(e) => e.preventDefault()}
+            >
+                <p className="text-gray-500">عکس را اینجا بکشید و رها کنید یا کلیک کنید</p>
+                <input type="file" onChange={(e) => handleDrop(e, "image")} hidden />
+            </div>
+            {preview && <img src={preview} alt="Preview" className="w-32 h-32 object-cover mx-auto mt-2 rounded-lg" />}
+
+            {/* دراپ‌باکس آپلود فایل */}
+            <div
+                className="border-2 border-dashed p-4 rounded-lg cursor-pointer text-center mb-4"
+                onDrop={(e) => handleDrop(e, "document")}
+                onDragOver={(e) => e.preventDefault()}
+            >
+                <p className="text-gray-500">فایل مقاله را اینجا بکشید و رها کنید یا کلیک کنید</p>
+                <input type="file" onChange={(e) => handleDrop(e, "document")} hidden />
+            </div>
+
+            {/* دراپ‌باکس آپلود ویدیو */}
+            <div
+                className="border-2 border-dashed p-4 rounded-lg cursor-pointer text-center mb-4"
+                onDrop={(e) => handleDrop(e, "video")}
+                onDragOver={(e) => e.preventDefault()}
+            >
+                <p className="text-gray-500">ویدیو مقاله را اینجا بکشید و رها کنید یا کلیک کنید</p>
+                <input type="file" onChange={(e) => handleDrop(e, "video")} hidden />
+            </div>
+
+            {/* دکمه‌های ذخیره و لغو */}
+            <div className="flex justify-end space-x-4">
+                <button onClick={handleCancel} className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600">لغو</button>
+                <button onClick={handleSave} className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">ذخیره مقاله</button>
+            </div>
+
+            <ToastContainer />
+        </div>
+    );
 };
 
-export default Example;
+export default ArticleEditor;

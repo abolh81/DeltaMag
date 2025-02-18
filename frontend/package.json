@@ -44,6 +44,7 @@
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.1.5",
     "react-scripts": "^5.0.1",
+    "react-toastify": "^11.0.3",
     "slate": "^0.100.0",
     "slate-history": "^0.110.3",
     "slate-react": "^0.100.0",

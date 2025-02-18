@@ -17,6 +17,7 @@ const SubmitArticle = () => {
             status: 'در انتظار تایید سردبیر',
             image: articleData.image,
             file: articleData.file,
+            video: articleData.video,
         };
         setArticles([...articles, newArticle]);
         setShowEditor(false); // بعد از ذخیره، ویرایشگر بسته شود
@@ -29,11 +30,7 @@ const SubmitArticle = () => {
             {/* دکمه ایجاد مقاله جدید */}
             {!showEditor && (
                 <button
-                onClick={() => {
-                    console.log("قبل از تغییر:", showEditor);
-                    setShowEditor(true);
-                    console.log("بعد از تغییر:", showEditor);
-                }}
+                    onClick={() => setShowEditor(true)}
                     className="mb-6 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
                 >
                     مقاله جدید
@@ -48,8 +45,8 @@ const SubmitArticle = () => {
                 />
             )}
 
-            {/* نمایش لیست مقالات کاربر */}
-            <ArticleList articles={articles} />
+            {/* نمایش لیست مقالات کاربر در صورتی که ویرایشگر نمایش داده نشود */}
+            {!showEditor && <ArticleList articles={articles} />}
         </div>
     );
 };
