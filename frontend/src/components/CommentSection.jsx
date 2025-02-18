@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 function CommentSection() {
     const [comment, setComment] = useState(''); // متن کامنت
     const [isLoggedIn, setIsLoggedIn] = useState(true); // وضعیت ورود کاربر (فرضاً کاربر وارد شده)
+    // setIsLoggedIn(true); // فرضاً کاربر وارد شده است
     const maxLength = 600; // حداکثر تعداد کاراکترها
 
     const handleCommentChange = (e) => {
@@ -34,6 +35,7 @@ function CommentSection() {
 
             {/* اگر کاربر وارد شده باشد */}
             {isLoggedIn && (
+                
                 <div>
                     <textarea
                         value={comment}

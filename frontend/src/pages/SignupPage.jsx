@@ -34,10 +34,10 @@ const SignupPage = () => {
     };
 
     // ثبت نام با گوگل
-    const responseGoogle = (response) => {
-        console.log('Google Response:', response);
-        // در اینجا می‌توانید اطلاعات کاربر را به سرور ارسال کنید
-    };
+    // const responseGoogle = (response) => {
+    //     console.log('Google Response:', response);
+    //     // در اینجا می‌توانید اطلاعات کاربر را به سرور ارسال کنید
+    // };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800">

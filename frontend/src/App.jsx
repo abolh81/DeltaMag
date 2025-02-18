@@ -7,15 +7,13 @@ import Article from "./pages/Article";
 import Author from "./pages/Author";
 import Multimedia from "./pages/Multimedia";
 import MediaDetailPage from './pages/MediaDetailPage';
-import JournalManagement from "./pages/JournalManagement";
-import UploadArticle from "./pages/UploadArticle";
 import LoginPage from './pages/LoginPage'; // مسیر کامپوننت LoginPage
 import SignupPage from './pages/SignupPage';
 
 import Dashboard from './pages/Dashboard';
 import Profile from './components/Profile';
 import ArticleManagement from './pages/ArticleManagement';
-import ArticleForm from './components/ArticleForm';
+import SubmitArticle from './pages/SubmitArticle';
 
 function App() {
   return (
@@ -34,13 +32,9 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="profile" element={<Profile user={{ name: 'علی', email: 'ali@example.com', bio: 'برنامه‌نویس' }} />} />
               {/* سایر صفحات فرعی */}
-              <Route path="article-management" element={<ArticleManagement />}>
-                <Route path="new" element={<ArticleForm />} />
-                <Route path=":id/edit" element={<ArticleForm />} />
-              </Route>
+              <Route path="submit-article" element={<SubmitArticle />} />
+              <Route path="article-management" element={<ArticleManagement />} />
             </Route>
-            <Route path="/journal-management" element={<JournalManagement />} />
-            <Route path="/upload-article" element={<UploadArticle />} />
           </Routes>
         </main>
         <Footer />

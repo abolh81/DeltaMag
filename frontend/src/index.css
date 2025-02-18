@@ -11,6 +11,36 @@
     font-style: normal;
 } */
 
+@media print {
+    body {
+        direction: rtl;
+        text-align: right;
+    }
+
+    .jodit-container {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+}
+
 body {
     font-family: 'DanaFanum', sans-serif;
+}
+
+.jodit-toolbar-button {
+    font-family: "dana", "Arial", sans-serif !important; /* فونت دکمه‌ها */
+    font-size: 14px !important; /* تغییر سایز فونت */
+}
+.jodit-dialog__content {
+    text-align: right !important;
+}
+.jodit-workplace ul , .jodit-workplace ol {
+    margin:1rem 0 !important;
+    padding-right: 40px !important;
+}
+.jodit-workplace ul{
+    list-style: disc !important;
+}
+.jodit-workplace ol{
+    list-style: decimal !important;
 }

@@ -5,14 +5,7 @@ import { faHeart, faSave, faLink } from '@fortawesome/free-solid-svg-icons';
 import { faTelegram, faWhatsapp, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import CommentSection from '../components/CommentSection'; // مسیر کامپوننت
 
-// آیکون‌های مربوط به نوع مقاله
-const articleTypeIcons = {
-    'تاریخ ریاضیات': 'history',
-    'فلسفه ریاضیات': 'atom',
-    'ریاضیات کودک': 'child',
-    'هندسه': 'shapes',
-    'جبر': 'square-root-alt',
-};
+
 
 function calculateReadingTime(text) {
     const wordsPerMinute = 200; // تعداد کلمات در دقیقه
@@ -136,10 +129,6 @@ function ArticleDetailPage() {
                 {/* باکس نویسنده و نوع مقاله */}
                 <div className="flex justify-between items-center mb-6 p-4 border-b border-gray-300 dark:border-gray-600">
                     <div className="flex items-center gap-2">
-                        <FontAwesomeIcon
-                            icon={articleTypeIcons[article.type]}
-                            className="text-xl text-gray-600 dark:text-gray-400"
-                        />
                         <span className="text-lg text-gray-600 dark:text-gray-400">
                             {article.type}
                         </span>
